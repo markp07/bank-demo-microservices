@@ -22,7 +22,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Profile("!pr")
 public class SwaggerConfig {
 
-  private static final String BASE_PACKAGE = "xyz.markpost.clients.controller";
+  private static final String BASE_PACKAGE = "xyz.markpost.transactions.controller";
 
   @Bean
   public Docket bankDemoApi() {

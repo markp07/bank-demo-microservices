@@ -8,7 +8,7 @@
   <artifactId>ClientsMicroservice</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Clients Microservice</name>
-  <description>Clients Microserivce Application</description>
+  <description>Clients Microservice Application</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>

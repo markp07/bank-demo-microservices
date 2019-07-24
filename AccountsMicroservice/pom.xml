@@ -8,7 +8,7 @@
   <artifactId>AccountsMicroservice</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Accounts Microservice</name>
-  <description>Accounts Microserivce Application</description>
+  <description>Accounts Microservice Application</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
