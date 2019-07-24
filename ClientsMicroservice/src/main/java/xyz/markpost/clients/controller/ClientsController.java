@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {"Clients"})
 public class ClientsController {
 
-  @GetMapping(path = "{name:^((?!swagger-ui.html).)*}", produces = "application/json")
+  @GetMapping(path = "{name}", produces = "application/json")
   public String sayHelloAccounts(@PathVariable(value = "name", required = false) String name) {
     return "Clients - Hello World, " + name + "!";
   }
