@@ -14,6 +14,8 @@
   </properties>
 
   <modules>
+    <module>EurekaMicroservice</module>
+    <module>ApiGatewayMicroservice</module>
     <module>AccountsMicroservice</module>
     <module>ClientsMicroservice</module>
     <module>TransactionsMicroservice</module>

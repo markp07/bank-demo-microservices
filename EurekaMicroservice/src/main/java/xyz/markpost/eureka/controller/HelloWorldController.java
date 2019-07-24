@@ -1,4 +1,4 @@
-package xyz.markpost.transactions.controller;
+package xyz.markpost.eureka.controller;
 
 import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ public class HelloWorldController {
 
   @GetMapping(path = "{name}", produces = "application/json")
   public String sayHelloAccounts(@PathVariable(value = "name", required = false) String name) {
-    return "Transactions - Hello World, " + name + "!";
+    return "Eureka - Hello World, " + name + "!";
   }
 
 }
