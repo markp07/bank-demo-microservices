@@ -1,0 +1,4 @@
+INSERT INTO transaction (id, amount, date, description, type, account_id, contra_account_id) VALUES (1, 100.0, "2019-07-01", "Demo Transaction #1", 0, 1, 3);
+INSERT INTO transaction (id, amount, date, description, type, account_id, contra_account_id) VALUES (2, 125.5, "2019-07-04", "Demo Transaction #2", 1, 1, 3);
+INSERT INTO transaction (id, amount, date, description, type, account_id, contra_account_id) VALUES (3, 100.0, "2019-07-07", "Demo Transaction #3", 0, 3, 1);
+INSERT INTO transaction (id, amount, date, description, type, account_id, contra_account_id) VALUES (4, 125.5, "2019-07-10", "Demo Transaction #4", 1, 3, 1);

@@ -1,0 +1,109 @@
+version: '3.3'
+
+services:
+  # Accounts Microservice
+  accounts-microservice:
+    depends_on:
+      - eureka-microservice
+      - accounts-microservice-db
+    image: markpost/accounts-microservice:0.1
+    ports:
+      - "7701:7701"
+    restart: always
+    build:
+      context: ./AccountsMicroservice
+      dockerfile: Dockerfile
+    volumes:
+      - /data/accounts-microservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://accounts-microservice-db/bank-accounts?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=accounts-user
+      - SPRING_DATASOURCE_PASSWORD=123456
+    networks:
+      - bank-demo-microservices-net
+  # Database Accounts Microservice
+  accounts-microservice-db:
+    image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - accounts-microservice-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: bank-accounts
+      MYSQL_USER: accounts-user
+      MYSQL_PASSWORD: 123456
+    networks:
+      - bank-demo-microservices-net
+
+  # ApiGateway Microservice
+  api-gateway-microservice:
+    depends_on:
+      - eureka-microservice
+    image: markpost/api-gateway-microservice:0.1
+    ports:
+      - "7700:7700"
+    restart: always
+    build:
+      context: ./ApiGatewayMicroservice
+      dockerfile: Dockerfile
+    volumes:
+      - /data/api-gateway-microservice
+    networks:
+      - bank-demo-microservices-net
+
+  # Clients Microservice
+  clients-microservice:
+    depends_on:
+      - eureka-microservice
+    image: markpost/clients-microservice:0.1
+    ports:
+      - "7702:7702"
+    restart: always
+    build:
+      context: ./ClientsMicroservice
+      dockerfile: Dockerfile
+    volumes:
+      - /data/clients-microservice
+    networks:
+      - bank-demo-microservices-net
+
+  # Eureka Microservice
+  eureka-microservice:
+    image: markpost/eureka-microservice:0.1
+    ports:
+      - "7799:7799"
+    restart: always
+    build:
+      context: ./EurekaMicroservice
+      dockerfile: Dockerfile
+    volumes:
+      - /data/eureka-microservice
+    networks:
+      - bank-demo-microservices-net
+
+  # Transactions Microservice
+  transactions-microservice:
+    depends_on:
+      - eureka-microservice
+    image: markpost/transactions-microservice:0.1
+    ports:
+      - "7703:7703"
+    restart: always
+    build:
+      context: ./TransactionsMicroservice
+      dockerfile: Dockerfile
+    volumes:
+      - /data/transactions-microservice
+    networks:
+      - bank-demo-microservices-net
+
+networks:
+  bank-demo-microservices-net:
+
+volumes:
+  accounts-microservice:
+  accounts-microservice-db:
+  api-gateway-microservice:
+  clients-microservice:
+  eureka-microservice:
+  transactions-microservice:

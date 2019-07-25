@@ -1,0 +1,2 @@
+INSERT INTO client (id, address, birth_date, first_name, last_name) VALUES (1, "Test Street 1", "1993-09-08", "Foo", "Bar");
+INSERT INTO client (id, address, birth_date, first_name, last_name) VALUES (2, "Demo Road 1", "1975-12-25", "Hello", "World");
