@@ -1,19 +1,23 @@
 package xyz.markpost.accounts.service;
 
 import static xyz.markpost.accounts.util.EntityNotFoundMessages.accountNotFound;
+import static xyz.markpost.accounts.util.EntityNotFoundMessages.clientNotFound;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.persistence.EntityNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.markpost.accounts.controller.ClientsClient;
 import xyz.markpost.accounts.dto.AccountRequestDTO;
 import xyz.markpost.accounts.dto.AccountResponseDTO;
 import xyz.markpost.accounts.model.Account;
 import xyz.markpost.accounts.model.AccountType;
+import xyz.markpost.accounts.model.ClientResponseDTO;
 import xyz.markpost.accounts.repository.AccountRepository;
 
 /**
@@ -21,16 +25,20 @@ import xyz.markpost.accounts.repository.AccountRepository;
  */
 @Service
 @Transactional
+@Log4j2
 public class AccountServiceImpl implements AccountService {
 
   private final AccountRepository accountRepository;
 
+  private final ClientsClient clientsClient;
 
   @Autowired
   public AccountServiceImpl(
-      AccountRepository accountRepository
+      AccountRepository accountRepository,
+      ClientsClient clientsClient
   ) {
     this.accountRepository = accountRepository;
+    this.clientsClient = clientsClient;
   }
 
   private static final long BANK_NUMBER_MIN = 10000000;
@@ -44,16 +52,25 @@ public class AccountServiceImpl implements AccountService {
    */
   @Override
   public AccountResponseDTO create(AccountRequestDTO accountRequestDTO) {
-    Account account = new Account();
+    log.info("Get client from Client Microservice");
+    ClientResponseDTO client = clientsClient.getClient(accountRequestDTO.getClientId());
+    log.info("Client retrieved from Client Microservice");
 
-    account.setClientId(accountRequestDTO.getClientId());
-    account.setNumber(createAccountNumber());
-    account.setType(accountRequestDTO.getType());
-    account.setBalance(0);
+    if(null != client) {
+      log.info("We got a client :)");
+      Account account = new Account();
 
-    account = accountRepository.save(account);
+      account.setClientId(accountRequestDTO.getClientId());
+      account.setNumber(createAccountNumber());
+      account.setType(accountRequestDTO.getType());
+      account.setBalance(0);
 
-    return createResponseAccount(account);
+      account = accountRepository.save(account);
+
+      return createResponseAccount(account);
+    } else {
+      throw new EntityNotFoundException(clientNotFound(accountRequestDTO.getClientId()));
+    }
   }
 
   /**

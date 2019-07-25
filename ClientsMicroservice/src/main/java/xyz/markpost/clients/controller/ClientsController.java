@@ -62,13 +62,20 @@ public class ClientsController {
    * @return List of found clients
    */
   @GetMapping(path = "{clientId}", produces = "application/json")
-  public List<ClientResponseDTO> retrieveClient(
+  public ClientResponseDTO retrieveSingleClient(
       @PathVariable(value = "clientId", required = false) Long clientId) {
-    if (null != clientId) {
-      return clientService.findById(clientId);
-    } else {
-      return clientService.findAll();
-    }
+    return clientService.findById(clientId);
+  }
+
+  /**
+   * REST API call for retrieving certain client or all clients TODO: add option for finding set of
+   * clients (input list of id's) TODO: swagger annotation
+   *
+   * @return List of found clients
+   */
+  @GetMapping(path = "", produces = "application/json")
+  public List<ClientResponseDTO> retrieveAllClients() {
+    return clientService.findAll();
   }
 
   /**

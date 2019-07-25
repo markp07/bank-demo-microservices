@@ -18,7 +18,7 @@ public interface ClientService {
    * @param id
    * @return
    */
-  List<ClientResponseDTO> findById(Long id);
+  ClientResponseDTO findById(Long id);
 
   /**
    *

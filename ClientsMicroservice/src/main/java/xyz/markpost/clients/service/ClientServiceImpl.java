@@ -56,16 +56,15 @@ public class ClientServiceImpl implements ClientService {
    * @return
    */
   @Override
-  public List<ClientResponseDTO> findById(Long id) {
+  public ClientResponseDTO findById(Long id) {
     Client client = findSingleClient(id);
-    ArrayList<ClientResponseDTO> clientResponseDTOS = new ArrayList<>();
+    ClientResponseDTO clientResponseDTO = null;
 
     if (null != client) {
-      ClientResponseDTO clientResponseDTO = createResponseClient(client);
-      clientResponseDTOS.add(clientResponseDTO);
+      clientResponseDTO = createResponseClient(client);
     }
 
-    return clientResponseDTOS;
+    return clientResponseDTO;
   }
 
   /**
