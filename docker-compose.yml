@@ -25,6 +25,8 @@ services:
   accounts-microservice-db:
     image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
     command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3307:3306
     volumes:
       - accounts-microservice-db:/var/lib/mysql
     environment:
@@ -55,6 +57,7 @@ services:
   clients-microservice:
     depends_on:
       - eureka-microservice
+      - clients-microservice-db
     image: markpost/clients-microservice:0.1
     ports:
       - "7702:7702"
@@ -62,8 +65,27 @@ services:
     build:
       context: ./ClientsMicroservice
       dockerfile: Dockerfile
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://clients-microservice-db/bank-clients?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=clients-user
+      - SPRING_DATASOURCE_PASSWORD=123456
     volumes:
       - /data/clients-microservice
+    networks:
+      - bank-demo-microservices-net
+  # Database Clients Microservice
+  clients-microservice-db:
+    image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3308:3306
+    volumes:
+      - clients-microservice-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: bank-clients
+      MYSQL_USER: clients-user
+      MYSQL_PASSWORD: 123456
     networks:
       - bank-demo-microservices-net
 
@@ -85,6 +107,7 @@ services:
   transactions-microservice:
     depends_on:
       - eureka-microservice
+      - transactions-microservice-db
     image: markpost/transactions-microservice:0.1
     ports:
       - "7703:7703"
@@ -94,6 +117,25 @@ services:
       dockerfile: Dockerfile
     volumes:
       - /data/transactions-microservice
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://transactions-microservice-db/bank-transactions?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=transactions-user
+      - SPRING_DATASOURCE_PASSWORD=123456
+    networks:
+      - bank-demo-microservices-net
+  # Database Transactions Microservice
+  transactions-microservice-db:
+    image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3309:3306
+    volumes:
+      - transactions-microservice-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: bank-transactions
+      MYSQL_USER: transactions-user
+      MYSQL_PASSWORD: 123456
     networks:
       - bank-demo-microservices-net
 
@@ -105,5 +147,7 @@ volumes:
   accounts-microservice-db:
   api-gateway-microservice:
   clients-microservice:
+  clients-microservice-db:
   eureka-microservice:
   transactions-microservice:
+  transactions-microservice-db:
