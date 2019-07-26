@@ -46,18 +46,14 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    * TODO: check requestDTO
-   * TODO: call to check whether client exists
    * @param accountRequestDTO
    * @return
    */
   @Override
   public AccountResponseDTO create(AccountRequestDTO accountRequestDTO) {
-    log.info("Get client from Client Microservice");
     ClientResponseDTO client = clientsClient.getClient(accountRequestDTO.getClientId());
-    log.info("Client retrieved from Client Microservice");
 
     if(null != client) {
-      log.info("We got a client :)");
       Account account = new Account();
 
       account.setClientId(accountRequestDTO.getClientId());
@@ -139,7 +135,12 @@ public class AccountServiceImpl implements AccountService {
     if (null != account) {
       Long clientId = accountRequestDTO.getClientId();
       if (null != clientId) {
-        account.setClientId(clientId);
+        ClientResponseDTO client = clientsClient.getClient(accountRequestDTO.getClientId());
+        if(null != client) {
+          account.setClientId(clientId);
+        } else{
+          throw new EntityNotFoundException(clientNotFound(accountRequestDTO.getClientId()));
+        }
       }
 
       AccountType accountType = accountRequestDTO.getType();
@@ -193,6 +194,7 @@ public class AccountServiceImpl implements AccountService {
     accountResponseDTO.setClientId(account.getClientId());
     accountResponseDTO.setNumber(account.getNumber());
     accountResponseDTO.setType(account.getType());
+    accountResponseDTO.setBalance(account.getBalance());
 
     return accountResponseDTO;
   }

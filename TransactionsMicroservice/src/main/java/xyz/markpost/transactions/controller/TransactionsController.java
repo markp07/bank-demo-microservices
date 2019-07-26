@@ -7,6 +7,7 @@ import io.swagger.annotations.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import xyz.markpost.transactions.dto.TransactionRequestDTO;
 import xyz.markpost.transactions.dto.TransactionResponseDTO;
 import xyz.markpost.transactions.service.TransactionService;
-import xyz.markpost.transactions.util.TransactionSortByDate;
 
 @SwaggerDefinition(
     tags = {
@@ -74,16 +74,28 @@ public class TransactionsController {
    * REST API call for retrieving certain transaction or all transactions TODO: add option for
    * finding set of transactions (input list of id's) TODO: swagger annotation
    *
-   * @param accountId Transactions filtered by this accountId (not required)
+   * @param transactionId Transactions filtered by this transactionId (not required)
    * @return List of found transactions
    */
   @GetMapping(produces = "application/json")
-  public List<TransactionResponseDTO> retrieveAllTransaction(@ApiParam(required = false, value = "Filter on accountId") @RequestParam(value = "accountId", required = false) Long accountId) {
-    if(null != accountId) {
-      return transactionService.findByAccountId(accountId);
+  public List<TransactionResponseDTO> retrieveAllTransaction(@ApiParam(required = false, value = "Filter on transactionId") @RequestParam(value = "transactionId", required = false) Long transactionId) {
+    if(null != transactionId) {
+      return transactionService.findByAccountId(transactionId);
     } else{
       return transactionService.findAll();
     }
+  }
+
+  /**
+   * Delete the transaction with the given id
+   * TODO: swagger annotation
+   *
+   * @param transactionId The id of the account to delete
+   */
+  @DeleteMapping(path = "{transactionId}", produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteAccount(@PathVariable("transactionId") Long transactionId) {
+    transactionService.delete(transactionId);
   }
 
 }

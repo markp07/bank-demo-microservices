@@ -6,7 +6,9 @@ services:
     depends_on:
       - eureka-microservice
       - accounts-microservice-db
+      - kafka
     image: markpost/accounts-microservice:0.1
+    container_name: acounts-microservice
     ports:
       - "7701:7701"
     restart: always
@@ -24,6 +26,7 @@ services:
   # Database Accounts Microservice
   accounts-microservice-db:
     image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    container_name: acounts-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3307:3306
@@ -42,6 +45,7 @@ services:
     depends_on:
       - eureka-microservice
     image: markpost/api-gateway-microservice:0.1
+    container_name: api-gateway-microservice
     ports:
       - "7700:7700"
     restart: always
@@ -58,7 +62,9 @@ services:
     depends_on:
       - eureka-microservice
       - clients-microservice-db
+      - kafka
     image: markpost/clients-microservice:0.1
+    container_name: clients-microservice
     ports:
       - "7702:7702"
     restart: always
@@ -76,6 +82,7 @@ services:
   # Database Clients Microservice
   clients-microservice-db:
     image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    container_name: clients-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3308:3306
@@ -92,6 +99,7 @@ services:
   # Eureka Microservice
   eureka-microservice:
     image: markpost/eureka-microservice:0.1
+    container_name: eureka-microservice
     ports:
       - "7799:7799"
     restart: always
@@ -108,7 +116,9 @@ services:
     depends_on:
       - eureka-microservice
       - transactions-microservice-db
+      - kafka
     image: markpost/transactions-microservice:0.1
+    container_name: transactions-microservice
     ports:
       - "7703:7703"
     restart: always
@@ -126,6 +136,7 @@ services:
   # Database Transactions Microservice
   transactions-microservice-db:
     image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    container_name: transactions-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - 3309:3306
@@ -136,6 +147,33 @@ services:
       MYSQL_DATABASE: bank-transactions
       MYSQL_USER: transactions-user
       MYSQL_PASSWORD: 123456
+    networks:
+      - bank-demo-microservices-net
+
+  # Zookeeper
+  zookeeper:
+    image: p-nexus-3.development.nl.eu.abnamro.com:18445/wurstmeister/zookeeper
+    container_name: zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    networks:
+      - bank-demo-microservices-net
+
+  # Kafke
+  kafka:
+    image: p-nexus-3.development.nl.eu.abnamro.com:18445/wurstmeister/kafka
+    container_name: kafka
+    restart: always
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    links:
+      - zookeeper:zookeeper
+    environment:
+      - KAFKA_ADVERTISED_HOST_NAME=kafka
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
     networks:
       - bank-demo-microservices-net
 

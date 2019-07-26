@@ -36,4 +36,10 @@ public interface TransactionService {
    */
   List<TransactionResponseDTO> findAll();
 
+  /**
+   *
+   * @param transactionId
+   */
+  void delete(Long transactionId);
+
 }

@@ -18,4 +18,6 @@ public class AccountResponseDTO extends AccountRequestDTO {
 
   private String number;
 
+  private float balance;
+
 }

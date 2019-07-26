@@ -20,6 +20,6 @@ public class ErrorResponseBody {
 
   private String message;
 
-  private String url;
+  private static final String PATH = "/accounts";
 
 }

@@ -55,4 +55,7 @@ public class Transaction {
   @Column(name = "description")
   private String description;
 
+  @Column(name = "status")
+  private TransactionStatus status;
+
 }

@@ -46,8 +46,7 @@ public class RestResponseEntityExceptionHandler
         new Timestamp(System.currentTimeMillis()),
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        ex.getMessage(),
-        ((ServletWebRequest)request).getRequest().getRequestURL().toString()
+        ex.getMessage()
     );
     ObjectMapper jsonMapper = new ObjectMapper();
     try {

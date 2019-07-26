@@ -1,16 +1,20 @@
 package xyz.markpost.transactions.service;
 
 
+import static xyz.markpost.transactions.util.EntityNotFoundMessages.transactionNotFound;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.markpost.transactions.dto.TransactionRequestDTO;
 import xyz.markpost.transactions.dto.TransactionResponseDTO;
 import xyz.markpost.transactions.model.Transaction;
+import xyz.markpost.transactions.model.TransactionStatus;
 import xyz.markpost.transactions.model.TransactionType;
 import xyz.markpost.transactions.repository.TransactionRepository;
 import xyz.markpost.transactions.util.TransactionSortByDate;
@@ -24,15 +28,19 @@ public class TransactionServiceImpl implements TransactionService {
 
   private final TransactionRepository transactionRepository;
 
+  private final KafkaTemplate<String, String> kafkaTemplate;
+
   /**
    *
    * @param transactionRepository
    */
   @Autowired
   public TransactionServiceImpl(
-      TransactionRepository transactionRepository
+      TransactionRepository transactionRepository,
+      KafkaTemplate<String, String> kafkaTemplate
   ) {
     this.transactionRepository = transactionRepository;
+    this.kafkaTemplate = kafkaTemplate;
   }
 
 
@@ -51,27 +59,19 @@ public class TransactionServiceImpl implements TransactionService {
     transaction.setDate(transactionRequestDTO.getDate());
     transaction.setDescription(transactionRequestDTO.getDescription());
     transaction.setType(transactionRequestDTO.getType());
+    transaction.setStatus(TransactionStatus.NEW);
 
     transaction = transactionRepository.save(transaction);
 
-    //TODO: update accounts - connect to other service
-//    if (TransactionType.DEPOSIT == transaction.getType()) {
-//      float currentBalance = account.getBalance();
-//      float newBalance = currentBalance + transaction.getAmount();
-//      account.setBalance(newBalance);
-//
-//      currentBalance = contraAccount.getBalance();
-//      newBalance = currentBalance - transaction.getAmount();
-//      contraAccount.setBalance(newBalance);
-//    } else if (TransactionType.WITHDRAWAL == transaction.getType()) {
-//      float currentBalance = account.getBalance();
-//      float newBalance = currentBalance - transaction.getAmount();
-//      account.setBalance(newBalance);
-//
-//      currentBalance = contraAccount.getBalance();
-//      newBalance = currentBalance + transaction.getAmount();
-//      contraAccount.setBalance(newBalance);
-//    }
+    String topic = "TRANSACTION_B";
+    String message = "TRANSACTION_CREATED,"
+        + transaction.getId() + ","
+        + transaction.getAccountId() + ","
+        + transaction.getContraAccountId() + ","
+        + transaction.getType().toString() + ","
+        + transaction.getAmount();
+    kafkaTemplate.send(topic, message);
+    transaction.setStatus(TransactionStatus.PENDING);
 
     return createResponseTransaction(transaction);
   }
@@ -105,16 +105,7 @@ public class TransactionServiceImpl implements TransactionService {
     List<Transaction> transactions = transactionRepository.findTransactionByAccountId(accountId);
     transactions.addAll(transactionRepository.findTransactionByContraAccountId(accountId));
 
-    ArrayList<TransactionResponseDTO> transactionResponseDTOS = new ArrayList<>();
-
-    transactions.forEach(transaction -> {
-      TransactionResponseDTO transactionResponseDTO = createResponseTransaction(transaction);
-      transactionResponseDTOS.add(transactionResponseDTO);
-    });
-
-    transactionResponseDTOS.sort(new TransactionSortByDate());
-
-    return transactionResponseDTOS;
+    return handleRetrievedTransactions(transactions);
   }
 
   /**
@@ -124,16 +115,8 @@ public class TransactionServiceImpl implements TransactionService {
   @Override
   public List<TransactionResponseDTO> findAll() {
     Iterable<Transaction> transactions = transactionRepository.findAll();
-    ArrayList<TransactionResponseDTO> transactionResponseDTOS = new ArrayList<>();
 
-    transactions.forEach(transaction -> {
-      TransactionResponseDTO transactionResponseDTO = createResponseTransaction(transaction);
-      transactionResponseDTOS.add(transactionResponseDTO);
-    });
-
-    transactionResponseDTOS.sort(new TransactionSortByDate());
-
-    return transactionResponseDTOS;
+    return handleRetrievedTransactions(transactions);
   }
 
   /**
@@ -145,6 +128,24 @@ public class TransactionServiceImpl implements TransactionService {
     Optional<Transaction> transactionOptional = transactionRepository.findById(transactionId);
 
     return transactionOptional.orElse(null);
+  }
+
+  /**
+   *
+   * @param transactions
+   * @return
+   */
+  private List<TransactionResponseDTO> handleRetrievedTransactions(Iterable<Transaction> transactions) {
+    ArrayList<TransactionResponseDTO> transactionResponseDTOS = new ArrayList<>();
+
+    transactions.forEach(transaction -> {
+      TransactionResponseDTO transactionResponseDTO = createResponseTransaction(transaction);
+      transactionResponseDTOS.add(transactionResponseDTO);
+    });
+
+    transactionResponseDTOS.sort(new TransactionSortByDate());
+
+    return transactionResponseDTOS;
   }
 
   /**
@@ -162,8 +163,25 @@ public class TransactionServiceImpl implements TransactionService {
     transactionResponseDTO.setDate(transaction.getDate());
     transactionResponseDTO.setAmount(transaction.getAmount());
     transactionResponseDTO.setDescription(transaction.getDescription());
+    transactionResponseDTO.setStatus(transaction.getStatus());
 
     return transactionResponseDTO;
+  }
+
+  /**
+   *
+   * @param id
+   */
+  @Override
+  public void delete(Long id) {
+    Transaction transaction = findSingleTransaction(id);
+
+    if (null != transaction) {
+      transaction.setStatus(TransactionStatus.CANCELLED);
+      //TODO: handle balances
+    } else {
+      throw new EntityNotFoundException(transactionNotFound(id));
+    }
   }
 
 }
