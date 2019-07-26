@@ -25,7 +25,7 @@ services:
       - bank-demo-microservices-net
   # Database Accounts Microservice
   accounts-microservice-db:
-    image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    image: mysql:8
     container_name: acounts-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -81,7 +81,7 @@ services:
       - bank-demo-microservices-net
   # Database Clients Microservice
   clients-microservice-db:
-    image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    image: mysql:8
     container_name: clients-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -135,7 +135,7 @@ services:
       - bank-demo-microservices-net
   # Database Transactions Microservice
   transactions-microservice-db:
-    image: p-nexus-3.development.nl.eu.abnamro.com:18445/mysql:8
+    image: mysql:8
     container_name: transactions-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -152,7 +152,7 @@ services:
 
   # Zookeeper
   zookeeper:
-    image: p-nexus-3.development.nl.eu.abnamro.com:18445/wurstmeister/zookeeper
+    image: wurstmeister/zookeeper
     container_name: zookeeper
     restart: always
     ports:
@@ -162,7 +162,7 @@ services:
 
   # Kafke
   kafka:
-    image: p-nexus-3.development.nl.eu.abnamro.com:18445/wurstmeister/kafka
+    image: wurstmeister/kafka
     container_name: kafka
     restart: always
     ports:

@@ -17,7 +17,7 @@ import xyz.markpost.accounts.dto.AccountRequestDTO;
 import xyz.markpost.accounts.dto.AccountResponseDTO;
 import xyz.markpost.accounts.model.Account;
 import xyz.markpost.accounts.model.AccountType;
-import xyz.markpost.accounts.model.ClientResponseDTO;
+import xyz.markpost.accounts.dto.ClientResponseDTO;
 import xyz.markpost.accounts.repository.AccountRepository;
 
 /**

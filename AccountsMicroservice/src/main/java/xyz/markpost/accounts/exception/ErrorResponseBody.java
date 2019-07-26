@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponseBody {
+class ErrorResponseBody {
 
   private Timestamp timestamp;
 

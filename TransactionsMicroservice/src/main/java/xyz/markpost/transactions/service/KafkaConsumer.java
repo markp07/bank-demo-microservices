@@ -31,6 +31,7 @@ public class KafkaConsumer {
 
   @KafkaListener(topics = "TRANSACTION_A", groupId = "TransactionMicroservice")
   public void consume(String message) throws IOException {
+  //TODO: send message on failure
 
     if(message.contains("BALANCE_SUFFICIENT")){
       List<String> items = Arrays.asList(message.split("\\s*,\\s*"));
