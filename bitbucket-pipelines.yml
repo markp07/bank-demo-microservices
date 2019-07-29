@@ -13,4 +13,10 @@ pipelines:
             - maven
           script:
             - mvn -B install
+      - step:
+          services:
+            - docker
+          script:
+            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
+            - docker build -t $ACCOUNTS_IMAGE_NAME AccountsMicroservice
 
