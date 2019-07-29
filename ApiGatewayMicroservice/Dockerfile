@@ -4,6 +4,6 @@ LABEL maintainer="mark@markpost.xyz"
 VOLUME /tmp
 EXPOSE 7700
 
-COPY target/ApiGatewayMicroservice-*.jar ApiGatewayMicroservice.jar
+COPY /opt/atlassian/pipelines/agent/build/TransactionsMicroservice/target/ApiGatewayMicroservice-*.jar ApiGatewayMicroservice.jar
 
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","ApiGatewayMicroservice.jar"]
