@@ -7,7 +7,7 @@ services:
       - eureka-microservice
       - accounts-microservice-db
       - kafka
-    image: markpost/accounts-microservice:0.1
+    image: markpost/accounts-microservice:0.3.0
     container_name: acounts-microservice
     ports:
       - "7701:7701"
@@ -44,7 +44,7 @@ services:
   api-gateway-microservice:
     depends_on:
       - eureka-microservice
-    image: markpost/api-gateway-microservice:0.1
+    image: markpost/api-gateway-microservice:0.3.0
     container_name: api-gateway-microservice
     ports:
       - "7700:7700"
@@ -63,7 +63,7 @@ services:
       - eureka-microservice
       - clients-microservice-db
       - kafka
-    image: markpost/clients-microservice:0.1
+    image: markpost/clients-microservice:0.3.0
     container_name: clients-microservice
     ports:
       - "7702:7702"
@@ -98,7 +98,7 @@ services:
 
   # Eureka Microservice
   eureka-microservice:
-    image: markpost/eureka-microservice:0.1
+    image: markpost/eureka-microservice:0.3.0
     container_name: eureka-microservice
     ports:
       - "7799:7799"
@@ -117,7 +117,7 @@ services:
       - eureka-microservice
       - transactions-microservice-db
       - kafka
-    image: markpost/transactions-microservice:0.1
+    image: markpost/transactions-microservice:0.3.0
     container_name: transactions-microservice
     ports:
       - "7703:7703"
