@@ -19,5 +19,9 @@ pipelines:
             - cd AccountsMicroservice
             - ls .
             - ls target
-            - target/AccountsMicroservice-*.jar
+            - ls -lrt target/AccountsMicroservice-*.jar
+            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
+            - docker build -t $ACCOUNTS_IMAGE_NAME .
+#            - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+#            - docker push $ACCOUNTS_IMAGE_NAME
 
