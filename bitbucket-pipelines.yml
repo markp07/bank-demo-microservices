@@ -14,13 +14,7 @@ pipelines:
           caches:
             - maven
           script:
-            - ls .
-            - ls /
-            - pwd
             - mvn -B install
-            - ls .
-            - ls AccountsMicroservice
-            - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target
-#            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
-#            - docker build -t $ACCOUNTS_IMAGE_NAME AccountsMicroservice
+            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
+            - docker build -t $ACCOUNTS_IMAGE_NAME AccountsMicroservice
 

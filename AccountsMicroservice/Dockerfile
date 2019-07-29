@@ -4,6 +4,6 @@ LABEL maintainer="mark@markpost.xyz"
 VOLUME /tmp
 EXPOSE 7701
 
-COPY /opt/atlassian/pipelines/agent/build/TransactionsMicroservice/target/AccountsMicroservice-*.jar AccountsMicroservice.jar
+COPY /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target/AccountsMicroservice-*.jar AccountsMicroservice.jar
 
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","AccountsMicroservice.jar"]
