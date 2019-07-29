@@ -1,6 +1,7 @@
 package xyz.markpost.clients.service;
 
-import static xyz.markpost.clients.util.EntityNotFoundMessages.clientNotFound;
+
+import static xyz.markpost.util.EntityNotFoundMessages.clientNotFound;
 
 import java.sql.Date;
 import java.util.ArrayList;

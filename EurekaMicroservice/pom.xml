@@ -6,7 +6,7 @@
 
   <groupId>xyz.markpost</groupId>
   <artifactId>EurekaMicroservice</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <name>Eureka Microservice</name>
   <description>Eureka Microserivce Application</description>
 

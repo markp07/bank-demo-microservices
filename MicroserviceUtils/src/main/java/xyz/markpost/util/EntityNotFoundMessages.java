@@ -1,4 +1,4 @@
-package xyz.markpost.accounts.util;
+package xyz.markpost.util;
 
 public class EntityNotFoundMessages {
 
@@ -18,6 +18,15 @@ public class EntityNotFoundMessages {
    */
   public static String clientNotFound(Long clientId){
     return "Client with id " + clientId.toString() + " not found.";
+  }
+
+  /**
+   *
+   * @param transactionId
+   * @return
+   */
+  public static String transactionNotFound(Long transactionId){
+    return "Transaction with id " + transactionId.toString() + " not found.";
   }
 
 }

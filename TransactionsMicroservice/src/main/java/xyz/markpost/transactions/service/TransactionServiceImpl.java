@@ -1,7 +1,9 @@
 package xyz.markpost.transactions.service;
 
 
-import static xyz.markpost.transactions.util.EntityNotFoundMessages.transactionNotFound;
+import static xyz.markpost.util.EntityNotFoundMessages.transactionNotFound;
+import static xyz.markpost.util.KafkaTopics.KAFKA_TOPIC_TRANSACTIONS;
+import static xyz.markpost.util.KafkaTopics.KAFKA_TRANSACTION_IDENTIFIER_NEW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,6 @@ import xyz.markpost.transactions.dto.TransactionRequestDTO;
 import xyz.markpost.transactions.dto.TransactionResponseDTO;
 import xyz.markpost.transactions.model.Transaction;
 import xyz.markpost.transactions.model.TransactionStatus;
-import xyz.markpost.transactions.model.TransactionType;
 import xyz.markpost.transactions.repository.TransactionRepository;
 import xyz.markpost.transactions.util.TransactionSortByDate;
 
@@ -63,14 +64,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     transaction = transactionRepository.save(transaction);
 
-    String topic = "TRANSACTION_B";
-    String message = "TRANSACTION_CREATED,"
+    String message = KAFKA_TRANSACTION_IDENTIFIER_NEW
         + transaction.getId() + ","
         + transaction.getAccountId() + ","
         + transaction.getContraAccountId() + ","
         + transaction.getType().toString() + ","
         + transaction.getAmount();
-    kafkaTemplate.send(topic, message);
+    kafkaTemplate.send(KAFKA_TOPIC_TRANSACTIONS, message);
     transaction.setStatus(TransactionStatus.PENDING);
 
     return createResponseTransaction(transaction);

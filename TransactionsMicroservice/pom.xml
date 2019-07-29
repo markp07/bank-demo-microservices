@@ -6,7 +6,7 @@
 
   <groupId>xyz.markpost</groupId>
   <artifactId>TransactionsMicroservice</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <name>Transactions Microservice</name>
   <description>Transactions Microserivce Application</description>
 
@@ -27,6 +27,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xyz.markpost</groupId>
+      <artifactId>MicroservicesUtils</artifactId>
+      <version>0.3.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.cloud</groupId>

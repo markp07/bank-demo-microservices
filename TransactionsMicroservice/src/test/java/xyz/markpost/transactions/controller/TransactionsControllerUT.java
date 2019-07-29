@@ -1,7 +1,6 @@
 package xyz.markpost.transactions.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
@@ -21,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import xyz.markpost.transactions.dto.TransactionRequestDTO;
 import xyz.markpost.transactions.dto.TransactionResponseDTO;
 import xyz.markpost.transactions.service.TransactionService;
-import xyz.markpost.transactions.util.TransactionSortByDate;
+import xyz.markpost.util.TransactionSortByDate;
 
 @ExtendWith(SpringExtension.class)
 class TransactionsControllerUT {
