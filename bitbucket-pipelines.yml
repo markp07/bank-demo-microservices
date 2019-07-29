@@ -18,6 +18,9 @@ pipelines:
             - ls /
             - pwd
             - mvn -B install
-            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
-            - docker build -t $ACCOUNTS_IMAGE_NAME AccountsMicroservice
+            - ls .
+            - ls AccountsMicroservice
+            - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target
+#            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
+#            - docker build -t $ACCOUNTS_IMAGE_NAME AccountsMicroservice
 
