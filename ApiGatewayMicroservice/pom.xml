@@ -6,7 +6,7 @@
 
   <groupId>xyz.markpost</groupId>
   <artifactId>ApiGatewayMicroservice</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <name>ApiGateway Microservice</name>
   <description>ApiGateway Microserivce Application</description>
 

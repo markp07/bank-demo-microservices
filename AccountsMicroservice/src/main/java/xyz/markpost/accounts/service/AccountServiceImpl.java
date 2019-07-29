@@ -1,7 +1,7 @@
 package xyz.markpost.accounts.service;
 
-import static xyz.markpost.accounts.util.EntityNotFoundMessages.accountNotFound;
-import static xyz.markpost.accounts.util.EntityNotFoundMessages.clientNotFound;
+import static xyz.markpost.util.EntityNotFoundMessages.accountNotFound;
+import static xyz.markpost.util.EntityNotFoundMessages.clientNotFound;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,9 @@
 package xyz.markpost.transactions.service;
 
+import static xyz.markpost.util.KafkaTopics.KAFKA_TOPIC_TRANSACTIONS;
+import static xyz.markpost.util.KafkaTopics.KAFKA_TRANSACTION_IDENTIFIER_BALANCE_INSUFFICIENT;
+import static xyz.markpost.util.KafkaTopics.KAFKA_TRANSACTION_IDENTIFIER_BALANCE_SUFFICIENT;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,25 +33,22 @@ public class KafkaConsumer {
     this.kafkaTemplate = kafkaTemplate;
   }
 
-  @KafkaListener(topics = "TRANSACTION_A", groupId = "TransactionMicroservice")
+  @KafkaListener(topics = KAFKA_TOPIC_TRANSACTIONS, groupId = "TransactionMicroservice")
   public void consume(String message) throws IOException {
+    //TODO message when failed so trnasactions can rollback
 
-    if(message.contains("BALANCE_SUFFICIENT")){
+    if(message.contains(KAFKA_TRANSACTION_IDENTIFIER_BALANCE_SUFFICIENT)){
       List<String> items = Arrays.asList(message.split("\\s*,\\s*"));
 
-      log.info("BALANCE_SUFFICIENT - Update transaction");
       Transaction transaction = transactionRepository.findById(Long.parseLong(items.get(1))).get();
       transaction.setStatus(TransactionStatus.COMPLETED);
       transactionRepository.save(transaction);
-      log.info("BALANCE_SUFFICIENT - Update transaction done");
-    } else if(message.contains("BALANCE_UNSUFFICIENT")) {
+    } else if(message.contains(KAFKA_TRANSACTION_IDENTIFIER_BALANCE_INSUFFICIENT)) {
       List<String> items = Arrays.asList(message.split("\\s*,\\s*"));
 
-      log.info("BALANCE_UNSUFFICIENT - Update transaction");
       Transaction transaction = transactionRepository.findById(Long.parseLong(items.get(1))).get();
       transaction.setStatus(TransactionStatus.FAILED);
       transactionRepository.save(transaction);
-      log.info("BALANCE_UNSUFFICIENT - Update transaction done");
     }
 
     log.info(String.format("#### -> Consumed message -> %s", message));
