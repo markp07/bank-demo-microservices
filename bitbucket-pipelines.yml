@@ -18,8 +18,9 @@ pipelines:
             - ls /opt/atlassian/pipelines/agent/build/
             - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/
             - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target
+            - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target/AccountsMicroservice-0.3.0-SNAPSHOT.jar
+            - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target/AccountsMicroservice-*-SNAPSHOT.jar
+            - ls /opt/atlassian/pipelines/agent/build/AccountsMicroservice/target/AccountsMicroservice-*.jar
             - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts:$BITBUCKET_COMMIT
             - docker build -t $ACCOUNTS_IMAGE_NAME AccountsMicroservice
-            - cd AccountsMicroservice
-            - docker build -t $ACCOUNTS_IMAGE_NAME .
 
