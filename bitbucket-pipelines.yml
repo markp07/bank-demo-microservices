@@ -39,14 +39,14 @@ pipelines:
             - docker build -t $CLIENTS_IMAGE_NAME .
             - docker push $CLIENTS_IMAGE_NAME
             # Push Eureka Microservice to Docker Hub
-              - cd ../EurekaMicroservice
+            - cd ../EurekaMicroservice
             - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
             - EUREKA_VERSION=(${MVN_VERSION//-/ })
             - export EUREKA_IMAGE_NAME=markpost/bank-demo-eureka:$EUREKA_VERSION
             - docker build -t $EUREKA_IMAGE_NAME .
             - docker push $EUREKA_IMAGE_NAME
             # Push Transactions Microservice to Docker Hub
-              - cd ../TransactionsMicroservice
+            - cd ../TransactionsMicroservice
             - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
             - TRANSACTIONS_VERSION=(${MVN_VERSION//-/ })
             - export TRANSACTIONS_IMAGE_NAME=markpost/bank-demo-transactions:$TRANSACTIONS_VERSION
