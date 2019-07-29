@@ -47,7 +47,7 @@ pipelines:
             - EUREKA_VERSION=(${MVN_VERSION//-/ })
             - export EUREKA_IMAGE_NAME=markpost/bank-demo-eureka
             - docker build -t $EUREKA_IMAGE_NAME:$EUREKA_VERSION .
-              - docker tag $EUREKA_IMAGE_NAME:$EUREKA_VERSION $EUREKA_IMAGE_NAME:latest
+            - docker tag $EUREKA_IMAGE_NAME:$EUREKA_VERSION $EUREKA_IMAGE_NAME:latest
             - docker push $EUREKA_IMAGE_NAME
             # Push Transactions Microservice to Docker Hub
             - cd ../TransactionsMicroservice
