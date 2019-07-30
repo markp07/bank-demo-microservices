@@ -1,4 +1,4 @@
-FROM  openjdk:8-jdk-alpine
+FROM  ${DOCKER_PREFIX}openjdk:8-jdk-alpine
 
 LABEL maintainer="mark@markpost.xyz"
 VOLUME /tmp
