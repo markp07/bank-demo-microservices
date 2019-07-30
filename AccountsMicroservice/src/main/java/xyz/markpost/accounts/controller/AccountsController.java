@@ -6,7 +6,6 @@ import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,8 +78,11 @@ public class AccountsController {
    * @return List of found accounts
    */
   @GetMapping(produces = "application/json")
-  public List<AccountResponseDTO> retrieveAllAccounts(@ApiParam(required = false, value = "Filter on clientId") @RequestParam(value = "clientId", required = false) Long clientId) {
-    if(null != clientId) {
+  public List<AccountResponseDTO> retrieveAllAccounts(
+      @ApiParam(required = false, value = "Filter on clientId")
+      @RequestParam(value = "clientId", required = false)
+          Long clientId) {
+    if (null != clientId) {
       return accountService.findByClientId(clientId);
     } else {
       return accountService.findAll();

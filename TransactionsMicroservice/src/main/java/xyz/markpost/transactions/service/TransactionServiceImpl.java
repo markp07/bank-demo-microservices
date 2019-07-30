@@ -135,7 +135,8 @@ public class TransactionServiceImpl implements TransactionService {
    * @param transactions
    * @return
    */
-  private List<TransactionResponseDTO> handleRetrievedTransactions(Iterable<Transaction> transactions) {
+  private List<TransactionResponseDTO> handleRetrievedTransactions(
+      Iterable<Transaction> transactions) {
     ArrayList<TransactionResponseDTO> transactionResponseDTOS = new ArrayList<>();
 
     transactions.forEach(transaction -> {

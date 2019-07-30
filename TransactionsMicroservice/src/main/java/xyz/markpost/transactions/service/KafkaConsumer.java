@@ -39,13 +39,13 @@ public class KafkaConsumer {
     log.info("KAFKA CONSUMED -> " + message);
     boolean success = false;
 
-    if(message.contains(KAFKA_TRANSACTION_IDENTIFIER_BALANCE_SUFFICIENT)){
+    if (message.contains(KAFKA_TRANSACTION_IDENTIFIER_BALANCE_SUFFICIENT)) {
       success = updateTransaction(message, TransactionStatus.COMPLETED);
-    } else if(message.contains(KAFKA_TRANSACTION_IDENTIFIER_BALANCE_INSUFFICIENT)) {
+    } else if (message.contains(KAFKA_TRANSACTION_IDENTIFIER_BALANCE_INSUFFICIENT)) {
       success = updateTransaction(message, TransactionStatus.FAILED);
     }
 
-    if(!success){
+    if (!success) {
       //TODO: handle failure
     }
   }
@@ -56,12 +56,13 @@ public class KafkaConsumer {
    * @param status
    * @return
    */
-  private boolean updateTransaction(String message, TransactionStatus status){
+  private boolean updateTransaction(String message, TransactionStatus status) {
     List<String> items = Arrays.asList(message.split("\\s*,\\s*"));
     boolean success = false;
 
-    Optional<Transaction> transactionOptional = transactionRepository.findById(Long.parseLong(items.get(1)));
-    if(transactionOptional.isPresent()) {
+    Optional<Transaction> transactionOptional = transactionRepository
+        .findById(Long.parseLong(items.get(1)));
+    if (transactionOptional.isPresent()) {
       Transaction transaction = transactionOptional.get();
       transaction.setStatus(status);
       transactionRepository.save(transaction);

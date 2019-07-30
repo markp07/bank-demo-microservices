@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -19,10 +18,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestResponseEntityExceptionHandler
     extends ResponseEntityExceptionHandler {
 
-  @ExceptionHandler(value = { EntityNotFoundException.class, IllegalArgumentException.class, IllegalStateException.class })
+  @ExceptionHandler(value = {EntityNotFoundException.class, IllegalArgumentException.class,
+      IllegalStateException.class})
   protected ResponseEntity<Object> handleConflict(RuntimeException exception, WebRequest request) {
     ResponseEntity<Object> responseEntity;
-    if(exception instanceof EntityNotFoundException){
+    if (exception instanceof EntityNotFoundException) {
       responseEntity = handleEntityNotFoundException(exception, request);
     } else {
       //TODO default error
@@ -40,7 +40,8 @@ public class RestResponseEntityExceptionHandler
    * @param request
    * @return
    */
-  private ResponseEntity<Object> handleEntityNotFoundException(RuntimeException ex, WebRequest request) {
+  private ResponseEntity<Object> handleEntityNotFoundException(RuntimeException ex,
+      WebRequest request) {
     String bodyOfResponse;
     ErrorResponseBody errorResponseBody = new ErrorResponseBody(
         new Timestamp(System.currentTimeMillis()),

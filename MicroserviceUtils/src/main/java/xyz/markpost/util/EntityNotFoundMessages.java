@@ -7,7 +7,7 @@ public class EntityNotFoundMessages {
    * @param accountId
    * @return
    */
-  public static String accountNotFound(Long accountId){
+  public static String accountNotFound(Long accountId) {
     return "Account with id " + accountId.toString() + " not found.";
   }
 
@@ -16,7 +16,7 @@ public class EntityNotFoundMessages {
    * @param clientId
    * @return
    */
-  public static String clientNotFound(Long clientId){
+  public static String clientNotFound(Long clientId) {
     return "Client with id " + clientId.toString() + " not found.";
   }
 
@@ -25,7 +25,7 @@ public class EntityNotFoundMessages {
    * @param transactionId
    * @return
    */
-  public static String transactionNotFound(Long transactionId){
+  public static String transactionNotFound(Long transactionId) {
     return "Transaction with id " + transactionId.toString() + " not found.";
   }
 
