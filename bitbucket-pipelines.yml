@@ -9,8 +9,52 @@ pipelines:
   branches:
     release/dockerhub:
       - step:
+          services:
+            - docker
           caches:
             - maven
           script:
+            # Build all microservices
             - mvn -B install
+            - docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
+            # Push Accounts Microservice to Docker Hub
+            - cd AccountsMicroservice
+            - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+            - ACCOUNTS_VERSION=(${MVN_VERSION//-/ })
+            - export ACCOUNTS_IMAGE_NAME=markpost/bank-demo-accounts
+            - docker build -t $ACCOUNTS_IMAGE_NAME:$ACCOUNTS_VERSION .
+            - docker tag $ACCOUNTS_IMAGE_NAME:$ACCOUNTS_VERSION $ACCOUNTS_IMAGE_NAME:latest
+            - docker push $ACCOUNTS_IMAGE_NAME
+            # Push Account Api Gateway Microservice to Docker Hub
+            - cd ../ApiGatewayMicroservice
+            - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+            - APIGATEWAY_VERSION=(${MVN_VERSION//-/ })
+            - export APIGATEWAY_IMAGE_NAME=markpost/bank-demo-apigateway
+            - docker build -t $APIGATEWAY_IMAGE_NAME:$APIGATEWAY_VERSION .
+            - docker tag $APIGATEWAY_IMAGE_NAME:$APIGATEWAY_VERSION $APIGATEWAY_IMAGE_NAME:latest
+            - docker push $APIGATEWAY_IMAGE_NAME
+            # Push Clients Microservice to Docker Hub
+            - cd ../ClientsMicroservice
+            - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+            - CLIENTS_VERSION=(${MVN_VERSION//-/ })
+            - export CLIENTS_IMAGE_NAME=markpost/bank-demo-clients
+            - docker build -t $CLIENTS_IMAGE_NAME:$CLIENTS_VERSION .
+            - docker tag $CLIENTS_IMAGE_NAME:$CLIENTS_VERSION $CLIENTS_IMAGE_NAME:latest
+            - docker push $CLIENTS_IMAGE_NAME
+            # Push Eureka Microservice to Docker Hub
+            - cd ../EurekaMicroservice
+            - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+            - EUREKA_VERSION=(${MVN_VERSION//-/ })
+            - export EUREKA_IMAGE_NAME=markpost/bank-demo-eureka
+            - docker build -t $EUREKA_IMAGE_NAME:$EUREKA_VERSION .
+            - docker tag $EUREKA_IMAGE_NAME:$EUREKA_VERSION $EUREKA_IMAGE_NAME:latest
+            - docker push $EUREKA_IMAGE_NAME
+            # Push Transactions Microservice to Docker Hub
+            - cd ../TransactionsMicroservice
+            - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+            - TRANSACTIONS_VERSION=(${MVN_VERSION//-/ })
+            - export TRANSACTIONS_IMAGE_NAME=markpost/bank-demo-transactions
+            - docker build -t $TRANSACTIONS_IMAGE_NAME:$TRANSACTIONS_VERSION .
+            - docker tag $TRANSACTIONS_IMAGE_NAME:$TRANSACTIONS_VERSION $TRANSACTIONS_IMAGE_NAME:latest
+            - docker push $TRANSACTIONS_IMAGE_NAME
 

@@ -19,6 +19,7 @@ import xyz.markpost.accounts.model.Account;
 import xyz.markpost.accounts.model.AccountType;
 import xyz.markpost.accounts.model.ClientResponseDTO;
 import xyz.markpost.accounts.repository.AccountRepository;
+import xyz.markpost.util.dto.TransactionType;
 
 /**
  *
@@ -53,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
   public AccountResponseDTO create(AccountRequestDTO accountRequestDTO) {
     ClientResponseDTO client = clientsClient.getClient(accountRequestDTO.getClientId());
 
-    if(null != client) {
+    if (null != client) {
       Account account = new Account();
 
       account.setClientId(accountRequestDTO.getClientId());
@@ -77,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
   @Override
   public AccountResponseDTO findById(Long id) {
     Account account = findSingleAccount(id);
-    AccountResponseDTO accountResponseDTO =  null;
+    AccountResponseDTO accountResponseDTO = null;
 
     if (null != account) {
       accountResponseDTO = createResponseAccount(account);
@@ -136,9 +137,9 @@ public class AccountServiceImpl implements AccountService {
       Long clientId = accountRequestDTO.getClientId();
       if (null != clientId) {
         ClientResponseDTO client = clientsClient.getClient(accountRequestDTO.getClientId());
-        if(null != client) {
+        if (null != client) {
           account.setClientId(clientId);
-        } else{
+        } else {
           throw new EntityNotFoundException(clientNotFound(accountRequestDTO.getClientId()));
         }
       }
@@ -159,6 +160,46 @@ public class AccountServiceImpl implements AccountService {
   /**
    *
    * @param id
+   * @param amount
+   * @return
+   */
+  @Override
+  public boolean checkBalance(Long id, float amount) {
+    Account account = findSingleAccount(id);
+    boolean success = false;
+
+    if (null != account) {
+      success = (account.getBalance() >= amount);
+    }
+
+    return success;
+  }
+
+  /**
+   *
+   * @param id
+   * @param amount
+   * @param type
+   * @return
+   */
+  @Override
+  public boolean updateBalance(Long id, float amount, TransactionType type) {
+    Account account = findSingleAccount(id);
+    boolean success = false;
+
+    if (null != account) {
+      if (TransactionType.DEPOSIT == type) {
+        account.updateBalance(amount);
+      } else if (TransactionType.WITHDRAWAL == type) {
+        account.updateBalance(amount * -1);
+      }
+      success = true;
+    }
+    return success;
+  }
+
+  /**
+   *
    */
   @Override
   public void delete(Long id) {
@@ -173,8 +214,6 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    *
-   * @param id
-   * @return
    */
   private Account findSingleAccount(Long id) {
     Optional<Account> accountOptional = accountRepository.findById(id);
@@ -184,8 +223,6 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    *
-   * @param account
-   * @return
    */
   private AccountResponseDTO createResponseAccount(Account account) {
     AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
@@ -201,7 +238,6 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    *
-   * @return
    */
   private String createAccountNumber() {
     long number = ThreadLocalRandom.current().nextLong(BANK_NUMBER_MIN, BANK_NUMBER_MAX + 1);

@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import xyz.markpost.transactions.dto.TransactionRequestDTO;
 import xyz.markpost.transactions.dto.TransactionResponseDTO;
 import xyz.markpost.transactions.service.TransactionService;
-import xyz.markpost.util.TransactionSortByDate;
+import xyz.markpost.transactions.util.TransactionSortByDate;
 
 @ExtendWith(SpringExtension.class)
 class TransactionsControllerUT {

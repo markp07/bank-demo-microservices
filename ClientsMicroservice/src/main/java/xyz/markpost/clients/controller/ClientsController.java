@@ -3,7 +3,6 @@ package xyz.markpost.clients.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,8 @@ public class ClientsController {
   }
 
   /**
-   * REST API call for creating an client TODO: add ClientRequestDTO validation (custom annotation?)
+   * REST API call for creating an client
+   * TODO: add ClientRequestDTO validation (custom annotation?)
    * TODO: swagger annotation
    *
    * @param clientRequestDTO DTO containing data for new client entity
@@ -55,8 +55,9 @@ public class ClientsController {
   }
 
   /**
-   * REST API call for retrieving certain client or all clients TODO: add option for finding set of
-   * clients (input list of id's) TODO: swagger annotation
+   * REST API call for retrieving certain client or all clients
+   * TODO: add option for finding set of clients (input list of id's)
+   * TODO: swagger annotation
    *
    * @param clientId Client to retrieve (not required)
    * @return List of found clients
@@ -68,8 +69,9 @@ public class ClientsController {
   }
 
   /**
-   * REST API call for retrieving certain client or all clients TODO: add option for finding set of
-   * clients (input list of id's) TODO: swagger annotation
+   * REST API call for retrieving certain client or all clients
+   * TODO: add option for finding set of clients (input list of id's)
+   * TODO: swagger annotation
    *
    * @return List of found clients
    */
@@ -79,8 +81,9 @@ public class ClientsController {
   }
 
   /**
-   * Update given client TODO: add clientRequestDTO validation (custom annotation?) TODO: swagger
-   * annotation
+   * Update given client
+   * TODO: add clientRequestDTO validation (custom annotation?)
+   * TODO: swagger annotation
    *
    * @param clientId The id of the client to update
    * @param clientRequestDTO The data of the to update fields
@@ -94,7 +97,8 @@ public class ClientsController {
   }
 
   /**
-   * Delete the client with the given id TODO: swagger annotation
+   * Delete the client with the given id
+   * TODO: swagger annotation
    *
    * @param clientId The id of the client to delete
    */

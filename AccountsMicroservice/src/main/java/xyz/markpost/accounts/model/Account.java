@@ -50,4 +50,8 @@ public class Account {
   @Column(name = "balance")
   private float balance;
 
+  public void updateBalance(float amount) {
+    balance = balance + amount;
+  }
+
 }

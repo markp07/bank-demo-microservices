@@ -64,7 +64,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     transaction = transactionRepository.save(transaction);
 
-    String message = KAFKA_TRANSACTION_IDENTIFIER_NEW
+    String message = KAFKA_TRANSACTION_IDENTIFIER_NEW + ","
         + transaction.getId() + ","
         + transaction.getAccountId() + ","
         + transaction.getContraAccountId() + ","
@@ -135,7 +135,8 @@ public class TransactionServiceImpl implements TransactionService {
    * @param transactions
    * @return
    */
-  private List<TransactionResponseDTO> handleRetrievedTransactions(Iterable<Transaction> transactions) {
+  private List<TransactionResponseDTO> handleRetrievedTransactions(
+      Iterable<Transaction> transactions) {
     ArrayList<TransactionResponseDTO> transactionResponseDTOS = new ArrayList<>();
 
     transactions.forEach(transaction -> {

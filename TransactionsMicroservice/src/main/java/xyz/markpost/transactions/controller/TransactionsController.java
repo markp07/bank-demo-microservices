@@ -71,17 +71,21 @@ public class TransactionsController {
   }
 
   /**
-   * REST API call for retrieving certain transaction or all transactions TODO: add option for
-   * finding set of transactions (input list of id's) TODO: swagger annotation
+   * REST API call for retrieving certain transaction or all transactions
+   * TODO: add option for finding set of transactions (input list of id's)
+   * TODO: swagger annotation
    *
    * @param transactionId Transactions filtered by this transactionId (not required)
    * @return List of found transactions
    */
   @GetMapping(produces = "application/json")
-  public List<TransactionResponseDTO> retrieveAllTransaction(@ApiParam(required = false, value = "Filter on transactionId") @RequestParam(value = "transactionId", required = false) Long transactionId) {
-    if(null != transactionId) {
+  public List<TransactionResponseDTO> retrieveAllTransaction(
+      @ApiParam(required = false, value = "Filter on transactionId")
+      @RequestParam(value = "transactionId", required = false)
+          Long transactionId) {
+    if (null != transactionId) {
       return transactionService.findByAccountId(transactionId);
-    } else{
+    } else {
       return transactionService.findAll();
     }
   }
