@@ -19,6 +19,7 @@ import xyz.markpost.accounts.model.Account;
 import xyz.markpost.accounts.model.AccountType;
 import xyz.markpost.accounts.model.ClientResponseDTO;
 import xyz.markpost.accounts.repository.AccountRepository;
+import xyz.markpost.util.dto.TransactionType;
 
 /**
  *
@@ -154,6 +155,47 @@ public class AccountServiceImpl implements AccountService {
     }
 
     return createResponseAccount(account);
+  }
+
+  /**
+   *
+   * @param id
+   * @param amount
+   * @return
+   */
+  @Override
+  public boolean checkBalance(Long id, float amount){
+    Account account = findSingleAccount(id);
+    boolean success = false;
+
+    if(null != account){
+      success = (account.getBalance() >= amount);
+    }
+
+    return success;
+  }
+
+  /**
+   *
+   * @param id
+   * @param amount
+   * @param type
+   * @return
+   */
+  @Override
+  public boolean updateBalance(Long id, float amount, TransactionType type){
+    Account account = findSingleAccount(id);
+    boolean success = false;
+
+    if(null != account) {
+      if (TransactionType.DEPOSIT == type) {
+        account.updateBalance(amount);
+      } else if (TransactionType.WITHDRAWAL == type) {
+        account.updateBalance(amount * -1);
+      }
+      success = true;
+    }
+    return success;
   }
 
   /**

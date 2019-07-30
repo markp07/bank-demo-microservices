@@ -64,7 +64,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     transaction = transactionRepository.save(transaction);
 
-    String message = KAFKA_TRANSACTION_IDENTIFIER_NEW
+    String message = KAFKA_TRANSACTION_IDENTIFIER_NEW + ","
         + transaction.getId() + ","
         + transaction.getAccountId() + ","
         + transaction.getContraAccountId() + ","

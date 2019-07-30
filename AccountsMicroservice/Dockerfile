@@ -1,3 +1,4 @@
+ARG DOCKER_PREFIX
 FROM  ${DOCKER_PREFIX}openjdk:8-jdk-alpine
 
 LABEL maintainer="mark@markpost.xyz"
