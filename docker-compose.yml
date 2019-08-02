@@ -119,6 +119,23 @@ services:
     networks:
       - bank-demo-microservices-net
 
+  # Admin Microservice
+  admin-microservice:
+    image: markpost/admin-microservice:0.3.0
+    container_name: admin
+    ports:
+      - 7788:7788
+    restart: always
+    build:
+      context: ./SpringBootAdminMicroservice
+      dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
+    volumes:
+      - /data/admin-microservice
+    networks:
+      - bank-demo-microservices-net
+
   # Transactions Microservice
   transactions-microservice:
     depends_on:

@@ -18,6 +18,7 @@
   <modules>
     <module>MicroserviceUtils</module>
     <module>EurekaMicroservice</module>
+    <module>SpringBootAdminMicroservice</module>
     <module>ApiGatewayMicroservice</module>
     <module>AccountsMicroservice</module>
     <module>ClientsMicroservice</module>
