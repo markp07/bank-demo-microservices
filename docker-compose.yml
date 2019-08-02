@@ -10,7 +10,7 @@ services:
     image: markpost/accounts-microservice:0.3.0
     container_name: acounts-microservice
     ports:
-      - "7701:7701"
+      - 7701:7701
     restart: always
     build:
       context: ./AccountsMicroservice
@@ -35,10 +35,10 @@ services:
     volumes:
       - accounts-microservice-db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bank-accounts
-      MYSQL_USER: accounts-user
-      MYSQL_PASSWORD: 123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bank-accounts
+      - MYSQL_USER=accounts-user
+      - MYSQL_PASSWORD=123456
     networks:
       - bank-demo-microservices-net
 
@@ -49,7 +49,7 @@ services:
     image: markpost/api-gateway-microservice:0.3.0
     container_name: api-gateway-microservice
     ports:
-      - "7700:7700"
+      - 7700:7700
     restart: always
     build:
       context: ./ApiGatewayMicroservice
@@ -70,7 +70,7 @@ services:
     image: markpost/clients-microservice:0.3.0
     container_name: clients-microservice
     ports:
-      - "7702:7702"
+      - 7702:7702
     restart: always
     build:
       context: ./ClientsMicroservice
@@ -95,10 +95,10 @@ services:
     volumes:
       - clients-microservice-db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bank-clients
-      MYSQL_USER: clients-user
-      MYSQL_PASSWORD: 123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bank-clients
+      - MYSQL_USER=clients-user
+      - MYSQL_PASSWORD=123456
     networks:
       - bank-demo-microservices-net
 
@@ -107,7 +107,7 @@ services:
     image: markpost/eureka-microservice:0.3.0
     container_name: eureka-microservice
     ports:
-      - "7799:7799"
+      - 7799:7799
     restart: always
     build:
       context: ./EurekaMicroservice
@@ -128,7 +128,7 @@ services:
     image: markpost/transactions-microservice:0.3.0
     container_name: transactions-microservice
     ports:
-      - "7703:7703"
+      - 7703:7703
     restart: always
     build:
       context: ./TransactionsMicroservice
@@ -153,10 +153,10 @@ services:
     volumes:
       - transactions-microservice-db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bank-transactions
-      MYSQL_USER: transactions-user
-      MYSQL_PASSWORD: 123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bank-transactions
+      - MYSQL_USER=transactions-user
+      - MYSQL_PASSWORD=123456
     networks:
       - bank-demo-microservices-net
 
@@ -166,17 +166,17 @@ services:
     container_name: zookeeper
     restart: always
     ports:
-      - "2181:2181"
+      - 2181:2181
     networks:
       - bank-demo-microservices-net
 
-  # Kafke
+  # Kafka
   kafka:
     image: ${DOCKER_PREFIX}wurstmeister/kafka
     container_name: kafka
     restart: always
     ports:
-      - "9092:9092"
+      - 9092:9092
     depends_on:
       - zookeeper
     links:
