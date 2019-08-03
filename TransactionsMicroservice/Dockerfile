@@ -1,5 +1,5 @@
 ARG DOCKER_PREFIX
-FROM  ${DOCKER_PREFIX}openjdk:8-jdk-alpine
+FROM  ${DOCKER_PREFIX}openjdk:11-jdk
 
 LABEL maintainer="mark@markpost.xyz"
 VOLUME /tmp
