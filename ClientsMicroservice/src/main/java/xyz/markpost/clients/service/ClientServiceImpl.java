@@ -1,6 +1,7 @@
 package xyz.markpost.clients.service;
 
-import static xyz.markpost.clients.util.EntityNotFoundMessages.clientNotFound;
+
+import static xyz.markpost.util.EntityNotFoundMessages.clientNotFound;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -33,8 +34,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    * TODO: check requestDTO
-   * @param clientRequestDTO
-   * @return
    */
   @Override
   public ClientResponseDTO create(ClientRequestDTO clientRequestDTO) {
@@ -52,8 +51,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    *
-   * @param id
-   * @return
    */
   @Override
   public ClientResponseDTO findById(Long id) {
@@ -69,7 +66,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    *
-   * @return
    */
   @Override
   public List<ClientResponseDTO> findAll() {
@@ -88,9 +84,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    *
-   * @param id
-   * @param clientRequestDTO
-   * @return
    */
   @Override
   public ClientResponseDTO update(Long id, ClientRequestDTO clientRequestDTO) {
@@ -127,7 +120,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    *
-   * @param id
    */
   @Override
   public void delete(Long id) {
@@ -142,8 +134,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    *
-   * @param id
-   * @return
    */
   private Client findSingleClient(Long id) {
     Optional<Client> clientOptional = clientRepository.findById(id);
@@ -153,8 +143,6 @@ public class ClientServiceImpl implements ClientService {
 
   /**
    *
-   * @param client
-   * @return
    */
   private ClientResponseDTO createResponseClient(Client client) {
     ClientResponseDTO clientResponseDTO = new ClientResponseDTO();

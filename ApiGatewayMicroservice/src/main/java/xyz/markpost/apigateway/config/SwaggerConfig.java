@@ -27,7 +27,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @PropertySource("classpath:swagger.properties")
 @Profile("!pr")
 @Primary
-public class SwaggerConfig  implements SwaggerResourcesProvider {
+public class SwaggerConfig implements SwaggerResourcesProvider {
 
   @Autowired
   RouteLocator routeLocator;
@@ -66,11 +66,12 @@ public class SwaggerConfig  implements SwaggerResourcesProvider {
   public List<SwaggerResource> get() {
     //Dynamic introduction of micro services using routeLocator
     List<SwaggerResource> resources = new ArrayList<>();
-    resources.add(swaggerResource("ApiGatewayMicroservice","/api-docs","1.0"));
+    resources.add(swaggerResource("ApiGatewayMicroservice", "/api-docs", "1.0"));
     //Recycling Lambda expressions to simplify code
-    routeLocator.getRoutes().forEach(route ->{
+    routeLocator.getRoutes().forEach(route -> {
       //Dynamic acquisition
-      resources.add(swaggerResource(route.getId(), route.getFullPath().replace("**", "api-docs"), "1.0"));
+      resources.add(
+          swaggerResource(route.getId(), route.getFullPath().replace("**", "api-docs"), "1.0"));
     });
 
     return resources;
@@ -78,12 +79,8 @@ public class SwaggerConfig  implements SwaggerResourcesProvider {
 
   /**
    *
-   * @param name
-   * @param location
-   * @param version
-   * @return
    */
-  private SwaggerResource swaggerResource(String name,String location, String version) {
+  private SwaggerResource swaggerResource(String name, String location, String version) {
     SwaggerResource swaggerResource = new SwaggerResource();
     swaggerResource.setName(name);
     swaggerResource.setLocation(location);

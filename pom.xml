@@ -6,15 +6,19 @@
 
   <groupId>xyz.markpost</groupId>
   <artifactId>BankDemoMicroservices</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
-    <java.version>1.8</java.version>
+    <java.version>1.10</java.version>
+    <maven.compiler.source>1.10</maven.compiler.source>
+    <maven.compiler.target>1.10</maven.compiler.target>
   </properties>
 
   <modules>
+    <module>MicroservicesUtils</module>
     <module>EurekaMicroservice</module>
+    <module>SpringBootAdminMicroservice</module>
     <module>ApiGatewayMicroservice</module>
     <module>AccountsMicroservice</module>
     <module>ClientsMicroservice</module>

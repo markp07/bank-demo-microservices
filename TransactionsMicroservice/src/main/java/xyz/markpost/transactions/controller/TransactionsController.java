@@ -90,7 +90,7 @@ public class TransactionsController {
           Long transactionId) {
     if(null != transactionId) {
       return transactionService.findByAccountId(transactionId);
-    } else{
+    } else {
       return transactionService.findAll();
     }
   }

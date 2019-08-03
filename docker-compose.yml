@@ -7,14 +7,16 @@ services:
       - eureka-microservice
       - accounts-microservice-db
       - kafka
-    image: markpost/accounts-microservice:0.1
+    image: markpost/accounts-microservice:0.3.0
     container_name: acounts-microservice
     ports:
-      - "7701:7701"
+      - 7701:7701
     restart: always
     build:
       context: ./AccountsMicroservice
       dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
     volumes:
       - /data/accounts-microservice
     environment:
@@ -25,7 +27,7 @@ services:
       - bank-demo-microservices-net
   # Database Accounts Microservice
   accounts-microservice-db:
-    image: mysql:8
+    image: ${DOCKER_PREFIX}mysql:8
     container_name: acounts-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -33,10 +35,10 @@ services:
     volumes:
       - accounts-microservice-db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bank-accounts
-      MYSQL_USER: accounts-user
-      MYSQL_PASSWORD: 123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bank-accounts
+      - MYSQL_USER=accounts-user
+      - MYSQL_PASSWORD=123456
     networks:
       - bank-demo-microservices-net
 
@@ -44,14 +46,16 @@ services:
   api-gateway-microservice:
     depends_on:
       - eureka-microservice
-    image: markpost/api-gateway-microservice:0.1
+    image: markpost/api-gateway-microservice:0.3.0
     container_name: api-gateway-microservice
     ports:
-      - "7700:7700"
+      - 7700:7700
     restart: always
     build:
       context: ./ApiGatewayMicroservice
       dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
     volumes:
       - /data/api-gateway-microservice
     networks:
@@ -63,14 +67,16 @@ services:
       - eureka-microservice
       - clients-microservice-db
       - kafka
-    image: markpost/clients-microservice:0.1
+    image: markpost/clients-microservice:0.3.0
     container_name: clients-microservice
     ports:
-      - "7702:7702"
+      - 7702:7702
     restart: always
     build:
       context: ./ClientsMicroservice
       dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://clients-microservice-db/bank-clients?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=clients-user
@@ -81,7 +87,7 @@ services:
       - bank-demo-microservices-net
   # Database Clients Microservice
   clients-microservice-db:
-    image: mysql:8
+    image: ${DOCKER_PREFIX}mysql:8
     container_name: clients-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -89,25 +95,44 @@ services:
     volumes:
       - clients-microservice-db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bank-clients
-      MYSQL_USER: clients-user
-      MYSQL_PASSWORD: 123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bank-clients
+      - MYSQL_USER=clients-user
+      - MYSQL_PASSWORD=123456
     networks:
       - bank-demo-microservices-net
 
   # Eureka Microservice
   eureka-microservice:
-    image: markpost/eureka-microservice:0.1
+    image: markpost/eureka-microservice:0.3.0
     container_name: eureka-microservice
     ports:
-      - "7799:7799"
+      - 7799:7799
     restart: always
     build:
       context: ./EurekaMicroservice
       dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
     volumes:
       - /data/eureka-microservice
+    networks:
+      - bank-demo-microservices-net
+
+  # Admin Microservice
+  admin-microservice:
+    image: markpost/admin-microservice:0.3.0
+    container_name: admin
+    ports:
+      - 7788:7788
+    restart: always
+    build:
+      context: ./SpringBootAdminMicroservice
+      dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
+    volumes:
+      - /data/admin-microservice
     networks:
       - bank-demo-microservices-net
 
@@ -117,14 +142,16 @@ services:
       - eureka-microservice
       - transactions-microservice-db
       - kafka
-    image: markpost/transactions-microservice:0.1
+    image: markpost/transactions-microservice:0.3.0
     container_name: transactions-microservice
     ports:
-      - "7703:7703"
+      - 7703:7703
     restart: always
     build:
       context: ./TransactionsMicroservice
       dockerfile: Dockerfile
+      args:
+        DOCKER_PREFIX: ${DOCKER_PREFIX}
     volumes:
       - /data/transactions-microservice
     environment:
@@ -135,7 +162,7 @@ services:
       - bank-demo-microservices-net
   # Database Transactions Microservice
   transactions-microservice-db:
-    image: mysql:8
+    image: ${DOCKER_PREFIX}mysql:8
     container_name: transactions-microservice-db
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -143,30 +170,30 @@ services:
     volumes:
       - transactions-microservice-db:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: bank-transactions
-      MYSQL_USER: transactions-user
-      MYSQL_PASSWORD: 123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=bank-transactions
+      - MYSQL_USER=transactions-user
+      - MYSQL_PASSWORD=123456
     networks:
       - bank-demo-microservices-net
 
   # Zookeeper
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: ${DOCKER_PREFIX}wurstmeister/zookeeper
     container_name: zookeeper
     restart: always
     ports:
-      - "2181:2181"
+      - 2181:2181
     networks:
       - bank-demo-microservices-net
 
-  # Kafke
+  # Kafka
   kafka:
-    image: wurstmeister/kafka
+    image: ${DOCKER_PREFIX}wurstmeister/kafka
     container_name: kafka
     restart: always
     ports:
-      - "9092:9092"
+      - 9092:9092
     depends_on:
       - zookeeper
     links:
