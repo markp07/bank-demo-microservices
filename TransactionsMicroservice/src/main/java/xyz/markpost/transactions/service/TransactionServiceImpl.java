@@ -73,6 +73,8 @@ public class TransactionServiceImpl implements TransactionService {
     kafkaTemplate.send(KAFKA_TOPIC_TRANSACTIONS, message);
     transaction.setStatus(TransactionStatus.PENDING);
 
+    //TODO: send message of failure..
+
     return createResponseTransaction(transaction);
   }
 

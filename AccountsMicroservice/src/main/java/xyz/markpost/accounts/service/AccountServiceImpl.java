@@ -17,7 +17,7 @@ import xyz.markpost.accounts.dto.AccountRequestDTO;
 import xyz.markpost.accounts.dto.AccountResponseDTO;
 import xyz.markpost.accounts.model.Account;
 import xyz.markpost.accounts.model.AccountType;
-import xyz.markpost.accounts.model.ClientResponseDTO;
+import xyz.markpost.accounts.dto.ClientResponseDTO;
 import xyz.markpost.accounts.repository.AccountRepository;
 import xyz.markpost.util.dto.TransactionType;
 
@@ -214,6 +214,8 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    *
+   * @param id
+   * @return
    */
   private Account findSingleAccount(Long id) {
     Optional<Account> accountOptional = accountRepository.findById(id);
@@ -223,6 +225,8 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    *
+   * @param account
+   * @return
    */
   private AccountResponseDTO createResponseAccount(Account account) {
     AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
@@ -238,6 +242,7 @@ public class AccountServiceImpl implements AccountService {
 
   /**
    *
+   * @return
    */
   private String createAccountNumber() {
     long number = ThreadLocalRandom.current().nextLong(BANK_NUMBER_MIN, BANK_NUMBER_MAX + 1);

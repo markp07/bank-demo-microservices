@@ -75,7 +75,6 @@ public class AccountsController {
 
   /**
    * REST API call for retrieving certain account or all accounts
-   * TODO: add option for finding set of accounts (input list of id's)
    * TODO: swagger annotation
    *
    * @return List of found accounts

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 docker-compose build --no-cache
-docker-compose up -d --remove-orphans --build
+docker-compose up -d --build --remove-orphans

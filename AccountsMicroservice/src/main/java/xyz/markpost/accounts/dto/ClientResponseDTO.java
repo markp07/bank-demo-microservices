@@ -1,4 +1,4 @@
-package xyz.markpost.accounts.model;
+package xyz.markpost.accounts.dto;
 
 import java.sql.Date;
 import lombok.AllArgsConstructor;
