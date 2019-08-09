@@ -13,11 +13,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Handler for handling exceptions. Retrieves exception and handles accordingly
+ */
 @Log4j2
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler
     extends ResponseEntityExceptionHandler {
 
+  /**
+   * Main handler. Entry point for exceptions
+   * @param exception The incoming exception
+   * @param request The request that was being handled when the exception occurred
+   * @return The response according to retrieved exception
+   */
   @ExceptionHandler(value = {EntityNotFoundException.class, IllegalArgumentException.class,
       IllegalStateException.class})
   protected ResponseEntity<Object> handleConflict(RuntimeException exception, WebRequest request) {
@@ -25,40 +34,69 @@ public class RestResponseEntityExceptionHandler
     if (exception instanceof EntityNotFoundException) {
       responseEntity = handleEntityNotFoundException(exception, request);
     } else {
-      //TODO default error
-      String bodyOfResponse = "This should be application specific";
-      responseEntity = handleExceptionInternal(exception, bodyOfResponse,
-          new HttpHeaders(), HttpStatus.CONFLICT, request);
+      responseEntity = handleDefaultException(exception, request);
     }
 
     return responseEntity;
   }
 
   /**
-   *
-   * @param ex
-   * @param request
-   * @return
+   * The method handles any other exception
+   * @param exception The incoming exception
+   * @param request The request that was being handled when the exception occurred
+   * @return The response according to retrieved exception
    */
-  private ResponseEntity<Object> handleEntityNotFoundException(RuntimeException ex,
+  private ResponseEntity<Object> handleDefaultException(RuntimeException exception,
       WebRequest request) {
     String bodyOfResponse;
+
     ErrorResponseBody errorResponseBody = new ErrorResponseBody(
         new Timestamp(System.currentTimeMillis()),
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        ex.getMessage()
+        exception.getMessage()
     );
+
     ObjectMapper jsonMapper = new ObjectMapper();
     try {
       bodyOfResponse = jsonMapper.writeValueAsString(errorResponseBody);
-      log.warn("EntityNotFoundException: " + bodyOfResponse);
+      log.info("Exception: " + bodyOfResponse);
     } catch (IOException e) {
       bodyOfResponse = "{}";
-      e.printStackTrace();
+      log.error("Could not convert string into JSON.", e);
     }
 
-    return handleExceptionInternal(ex, bodyOfResponse,
+    return handleExceptionInternal(exception, bodyOfResponse,
         new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+  }
+
+  /**
+   * The method handles the Entity Not Found exceptions
+   * @param exception The incoming exception
+   * @param request The request that was being handled when the exception occurred
+   * @return The response according to retrieved exception
+   */
+  private ResponseEntity<Object> handleEntityNotFoundException(RuntimeException exception,
+      WebRequest request) {
+    String bodyOfResponse;
+
+    ErrorResponseBody errorResponseBody = new ErrorResponseBody(
+        new Timestamp(System.currentTimeMillis()),
+        HttpStatus.NO_CONTENT.value(),
+        HttpStatus.NO_CONTENT.getReasonPhrase(),
+        exception.getMessage()
+    );
+
+    ObjectMapper jsonMapper = new ObjectMapper();
+    try {
+      bodyOfResponse = jsonMapper.writeValueAsString(errorResponseBody);
+      log.info("EntityNotFoundException: " + bodyOfResponse);
+    } catch (IOException e) {
+      bodyOfResponse = "{}";
+      log.error("Could not convert string into JSON.", e);
+    }
+
+    return handleExceptionInternal(exception, bodyOfResponse,
+        new HttpHeaders(), HttpStatus.NO_CONTENT, request);
   }
 }

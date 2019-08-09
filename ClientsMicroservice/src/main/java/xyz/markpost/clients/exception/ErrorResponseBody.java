@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Object for error response back to the consumer
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorResponseBody {
+class ErrorResponseBody {
 
   private Timestamp timestamp;
 
