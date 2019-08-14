@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import xyz.markpost.accounts.dto.ClientResponseDTO;
 
 /**
- *
+ * The Client for Accounts Microservice to connect to the Clients Microservice
  */
 @FeignClient("clients")
 public interface ClientsClient {

@@ -22,7 +22,7 @@ import xyz.markpost.accounts.repository.AccountRepository;
 import xyz.markpost.util.dto.TransactionType;
 
 /**
- *
+ * Business logic for accounts
  */
 @Service
 @Transactional
@@ -46,9 +46,10 @@ public class AccountServiceImpl implements AccountService {
   private static final long BANK_NUMBER_MAX = 99999999;
 
   /**
-   * TODO: check requestDTO
-   * @param accountRequestDTO
-   * @return
+   * Create a new account
+   * TODO: check request DTO
+   * @param accountRequestDTO The data for creating an account
+   * @return The response dto for the created account
    */
   @Override
   public AccountResponseDTO create(AccountRequestDTO accountRequestDTO) {
@@ -71,9 +72,9 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @param id
-   * @return
+   * Find an account based on its' ID
+   * @param id The ID of the account to search
+   * @return The response DTO of the found account or null
    */
   @Override
   public AccountResponseDTO findById(Long id) {
@@ -88,46 +89,33 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @param clientId
-   * @return
+   * Find all accounts with this client ID
+   * @param clientId The client ID to use
+   * @return The found accounts or an empty list
    */
   @Override
   public List<AccountResponseDTO> findByClientId(Long clientId) {
     List<Account> accounts = accountRepository.findAccountsByClientId(clientId);
 
-    ArrayList<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
-
-    accounts.forEach(account -> {
-      AccountResponseDTO accountResponseDTO = createResponseAccount(account);
-      accountResponseDTOS.add(accountResponseDTO);
-    });
-
-    return accountResponseDTOS;
+    return handleFoundAccounts(accounts);
   }
 
   /**
-   *
-   * @return
+   * Find all accounts in the system
+   * @return All accounts or empty list
    */
   @Override
   public List<AccountResponseDTO> findAll() {
     Iterable<Account> accounts = accountRepository.findAll();
-    ArrayList<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
 
-    accounts.forEach(account -> {
-      AccountResponseDTO accountResponseDTO = createResponseAccount(account);
-      accountResponseDTOS.add(accountResponseDTO);
-    });
-
-    return accountResponseDTOS;
+    return handleFoundAccounts(accounts);
   }
 
   /**
-   *
-   * @param id
-   * @param accountRequestDTO
-   * @return
+   * Update account with given data
+   * @param id The ID of the account to update
+   * @param accountRequestDTO The data to update
+   * @return The response dto of the updated account
    */
   @Override
   public AccountResponseDTO update(Long id, AccountRequestDTO accountRequestDTO) {
@@ -158,10 +146,10 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @param id
-   * @param amount
-   * @return
+   * Check if the account has sufficient balance
+   * @param id The ID of the account
+   * @param amount The amount the account should minimally have
+   * @return Whether or not the account has sufficient balance
    */
   @Override
   public boolean checkBalance(Long id, float amount) {
@@ -176,11 +164,11 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @param id
-   * @param amount
-   * @param type
-   * @return
+   * Update the balance of the account
+   * @param id The ID of the account where the amount needs to be updated
+   * @param amount The amount to add or remove to the current amount
+   * @param type The TransactionType to apply
+   * @return Whether or not the action succeeded
    */
   @Override
   public boolean updateBalance(Long id, float amount, TransactionType type) {
@@ -199,7 +187,8 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
+   * Delete the account
+   * @param id The ID of the account to delete
    */
   @Override
   public void delete(Long id) {
@@ -213,9 +202,9 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @param id
-   * @return
+   * Method finds a simple account with the given ID
+   * @param id The ID of the account
+   * @return The found account or null when not found
    */
   private Account findSingleAccount(Long id) {
     Optional<Account> accountOptional = accountRepository.findById(id);
@@ -224,9 +213,9 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @param account
-   * @return
+   * Creates a response dto for the given account
+   * @param account The account to create a response dot for
+   * @return The created response dto
    */
   private AccountResponseDTO createResponseAccount(Account account) {
     AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
@@ -241,13 +230,29 @@ public class AccountServiceImpl implements AccountService {
   }
 
   /**
-   *
-   * @return
+   * Create a random account number
+   * @return The created account number
    */
   private String createAccountNumber() {
     long number = ThreadLocalRandom.current().nextLong(BANK_NUMBER_MIN, BANK_NUMBER_MAX + 1);
 
     return "BANK" + number;
+  }
+
+  /**
+   * Handle the found accounts and create a list of response dto's
+   * @param accounts The list of found accounts
+   * @return The list of converted accounts into response dto's
+   */
+  private List<AccountResponseDTO> handleFoundAccounts(Iterable<Account> accounts) {
+    ArrayList<AccountResponseDTO> accountResponseDTOS = new ArrayList<>();
+
+    accounts.forEach(account -> {
+      AccountResponseDTO accountResponseDTO = createResponseAccount(account);
+      accountResponseDTOS.add(accountResponseDTO);
+    });
+
+    return accountResponseDTOS;
   }
 
 }

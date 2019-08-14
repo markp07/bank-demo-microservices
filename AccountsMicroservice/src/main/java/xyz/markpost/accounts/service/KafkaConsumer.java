@@ -5,7 +5,6 @@ import static xyz.markpost.util.KafkaTopics.KAFKA_TRANSACTION_IDENTIFIER_BALANCE
 import static xyz.markpost.util.KafkaTopics.KAFKA_TRANSACTION_IDENTIFIER_BALANCE_SUFFICIENT;
 import static xyz.markpost.util.KafkaTopics.KAFKA_TRANSACTION_IDENTIFIER_NEW;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
 import xyz.markpost.util.dto.TransactionType;
 
 /**
- *
+ * The consumer to process consuming messages
  */
 @Service
 @Log4j2
@@ -39,12 +38,11 @@ public class KafkaConsumer {
   }
 
   /**
-   *
-   * @param message
-   * @throws IOException
+   * Kafka listener
+   * @param message Consuming messages
    */
   @KafkaListener(topics = KAFKA_TOPIC_TRANSACTIONS, groupId = "AccountMicroservice")
-  public void consume(String message) throws IOException {
+  public void consume(String message) {
     log.info("KAFKA CONSUMED -> " + message);
 
     if (message.contains(KAFKA_TRANSACTION_IDENTIFIER_NEW)) {
@@ -53,13 +51,14 @@ public class KafkaConsumer {
   }
 
   /**
-   *
-   * @param message
+   * Handles the message based on the transaction type. Add or remove money from the accounts
+   * @param message The received message
    */
   private void handleNewTransaction(String message) {
     NewTransactionMessage newTransactionMessage = splitMessage(message);
     boolean balanceSufficient = false;
 
+    //Update balances of accounts
     if (TransactionType.DEPOSIT == newTransactionMessage.getType()) {
       balanceSufficient = accountService.checkBalance(newTransactionMessage.getContraAccountId(),
           newTransactionMessage.getAmount());
@@ -86,6 +85,7 @@ public class KafkaConsumer {
       }
     }
 
+    //Send message back to complete transaction
     if (balanceSufficient) {
       sendKafkaMessage(KAFKA_TOPIC_TRANSACTIONS, KAFKA_TRANSACTION_IDENTIFIER_BALANCE_SUFFICIENT,
           newTransactionMessage);
@@ -97,9 +97,9 @@ public class KafkaConsumer {
   }
 
   /**
-   *
-   * @param message
-   * @return
+   * Parse the incoming message and create a NewTransactionMessage
+   * @param message The incoming message to use
+   * @return The created NewTransactionMessage
    */
   private NewTransactionMessage splitMessage(String message) {
     List<String> items = Arrays.asList(message.split("\\s*,\\s*"));
@@ -114,10 +114,10 @@ public class KafkaConsumer {
   }
 
   /**
-   *
-   * @param topic
-   * @param messageKey
-   * @param newTransactionMessage
+   * Sends the message with the given topic to kafka
+   * @param topic The topic to use
+   * @param messageKey The message key to send
+   * @param newTransactionMessage The data object for the message
    */
   private void sendKafkaMessage(String topic, String messageKey,
       NewTransactionMessage newTransactionMessage) {
@@ -129,7 +129,7 @@ public class KafkaConsumer {
   }
 
   /**
-   *
+   * Object for the received the message for a new transaction. This contains all the data
    */
   @Getter
   @Setter
