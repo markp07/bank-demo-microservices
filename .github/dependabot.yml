@@ -9,6 +9,10 @@ updates:
     labels:
       - "dependencies"
       - "java"
+    groups:
+      maven-dependencies:
+        patterns:
+          - "*"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
@@ -18,6 +22,10 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "docker"
     directory: "/ApiGatewayMicroservice"
@@ -26,6 +34,10 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "docker"
     directory: "/ClientsMicroservice"
@@ -34,6 +46,10 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "docker"
     directory: "/EurekaMicroservice"
@@ -42,6 +58,10 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "docker"
     directory: "/SpringBootAdminMicroservice"
@@ -50,6 +70,10 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "docker"
     directory: "/TransactionsMicroservice"
@@ -58,6 +82,10 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
 
   # Enable version updates for docker-compose
   - package-ecosystem: "docker"
@@ -67,3 +95,7 @@ updates:
     labels:
       - "dependencies"
       - "docker"
+    groups:
+      docker-dependencies:
+        patterns:
+          - "*"
