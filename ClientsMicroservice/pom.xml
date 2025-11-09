@@ -21,7 +21,7 @@
     <java.version>1.10</java.version>
     <maven.compiler.source>1.10</maven.compiler.source>
     <maven.compiler.target>1.10</maven.compiler.target>
-    <spring-cloud.version>Greenwich.SR2</spring-cloud.version>
+    <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
   </properties>
 
   <dependencies>
