@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.7</version>
+    <version>4.0.2</version>
     <relativePath/>
   </parent>
 
@@ -95,7 +95,7 @@
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.27.6</version>
+      <version>3.27.7</version>
       <scope>test</scope>
     </dependency>
     <dependency>
